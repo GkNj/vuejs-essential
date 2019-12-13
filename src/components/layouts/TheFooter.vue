@@ -96,7 +96,7 @@
                 designer: `
         <span style="font-size:0.9em">Designed by
           <span style="color: #e27575;font-size: 14px;">❤</span>
-          <a href="https://github.com/summerblue"target="_blank"style="color:inherit">Gaokai</a>
+          <a href="https://github.com/GkNj"target="_blank"style="color:inherit">Gaokai</a>
         </span>
       `,
                 sponsor: {

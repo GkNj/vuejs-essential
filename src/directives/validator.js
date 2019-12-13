@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 function validate(el, modifiers, bindingValue) {
     bindingValue = bindingValue && typeof bindingValue === 'object' ? bindingValue : {}
     const value = typeof el.value === 'string' ? el.value.trim() : ''
