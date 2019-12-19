@@ -91,7 +91,7 @@
                     const user = {
                         name: this.username,
                         password: this.password,
-                        avatar: `https://api.adorable.io/avatars/200/${this.username}.png`
+                        avatar: "https://avatars0.githubusercontent.com/u/29688020?s=40&v=4"
                     }
                     const localUser = this.$store.state.user
 
@@ -108,7 +108,7 @@
             },
             login(user) {
                 //分发login事件，以保存用户信息。
-                this.$store.dispatch('login', user)
+                this.$store.dispatch('Login.vue', user)
                 this.showMsg('注册成功', 'success')
             },
             showMsg(msg, type = 'warning') {

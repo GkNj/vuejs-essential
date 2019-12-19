@@ -9,7 +9,7 @@ Vue.use(Vuex)
 const state = {
     user: ls.getItem('user'),
     //保存当前用户的登录状态
-    auth:ls.getItem('auth')
+    auth: ls.getItem('auth')
 }
 //更改状态的方法，在这里可以更改状态，像store.commit('UPDATE_USER'，"user")这样提交一个事件类型，
 //这里不能包含异步操作
@@ -19,9 +19,9 @@ const mutations = {
         state.user = user
         ls.setItem('user', user)
     },
-    UPDATE_AUTH(state,auth){
-        state.auth=auth
-        ls.setItem("auth",auth)
+    UPDATE_AUTH(state, auth) {
+        state.auth = auth
+        ls.setItem("auth", auth)
     }
 }
 //action的第一个参数是与仓库具有相同属性和方法的context对象，可以通过context.state访问到state的状态，
@@ -30,8 +30,12 @@ const actions = {
     login({commit}, user) {
         //登录时如果传了用户信息就更新用户信息
         if (user) commit('UPDATE_USER', user)
-        commit('UPDATE_AUTH',true)
+        commit('UPDATE_AUTH', true)
         router.push('/')
+    },
+    logout({commit}, user) {
+        commit('UPDATE_AUTH', false)
+        router.push({ name: 'Home', params: { logout: true } })
     }
 }
 //不使用参数解构的action的写法
