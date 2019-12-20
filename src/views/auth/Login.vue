@@ -18,9 +18,11 @@
                         <input v-model.trim="password" id="password" v-validator.required="{ title: '密码' }" type="password" class="form-control" placeholder="请填写密码">
                     </div>
                     <br>
-                    <button @click="login" type="submit" class="btn btn-lg btn-success btn-block">
+                    <span @click="login">
+                    <button  type="submit" class="btn btn-lg btn-success btn-block">
                         <i class="fa fa-btn fa-sign-in"></i> 登录
                     </button>
+                    </span>
                 </div>
             </div>
         </div>

@@ -69,14 +69,13 @@
         },
         methods: {
             getCaptcha() {
-                const {tpl, captcha} = createCaptcha(6)
-
-                this.captchaTpl = tpl
+                const {tpl, captcha} = createCaptcha(6);
+                this.captchaTpl = tpl;
                 this.localCaptcha = captcha
             },
             register(e) {
                 this.$nextTick(() => {
-                    const target = e.target.type === 'submit' ? e.target : e.target.parentElement
+                    const target = e.target.type === 'submit' ? e.target : e.target.parentElement;
 
                     if (target.canSubmit) {
                         this.submit()
@@ -93,7 +92,7 @@
                         password: this.password,
                         avatar: "https://avatars0.githubusercontent.com/u/29688020?s=40&v=4"
                     }
-                    const localUser = this.$store.state.user
+                    const localUser = this.$store.state.user;
 
                     if (localUser) {
                         if (localUser.name === user.name) {
@@ -108,7 +107,7 @@
             },
             login(user) {
                 //分发login事件，以保存用户信息。
-                this.$store.dispatch('Login.vue', user)
+                this.$store.dispatch('login', user)
                 this.showMsg('注册成功', 'success')
             },
             showMsg(msg, type = 'warning') {

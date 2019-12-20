@@ -4,10 +4,12 @@ import router from './router'
 import './directives'
 import './components'
 import store from './store'
+import message from "./plugins/message";
 //引入插件，弹窗
 import VueSweetalert2 from './plugins/vue-sweetalert2'
 
 Vue.use(VueSweetalert2)
+Vue.use(message)
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({

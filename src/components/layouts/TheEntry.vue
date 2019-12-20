@@ -1,6 +1,20 @@
 <template>
     <div class="navbar-right">
         <ul v-if="auth" class="nav navbar-nav github-login">
+            <!--            创作文章-->
+            <li>
+                <a v-dropdown href="javascript:;">
+                    <i class="fa fa-plus text-md"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <router-link to="/articles/create">
+                            <i class="fa fa-paint-brush text-md"></i>
+                            创作文章
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
             <li>
                 <a v-dropdown href="javascript:;">
           <span v-if="user">
@@ -11,6 +25,12 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li>
+                        <router-link to="/user/1/edit">
+                            <i class="fa fa-cog text-md i-middle"></i>
+                            编辑资料
+                        </router-link>
+                    </li>
                     <li><a href="javascript:;" @click="logout"><i class="fa fa-sign-out text-md"></i>退出</a></li>
                 </ul>
             </li>
