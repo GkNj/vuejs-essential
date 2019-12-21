@@ -32,7 +32,7 @@
     import hljs from 'highlight.js'
     import ls from '@/utils/localStorage'
 
-    window.hljs = hljs
+    window.hljs = hljs;
 
     export default {
         name: 'Create',
@@ -62,7 +62,7 @@
                 this.content = simplemde.value()
             });
             //将simplemde添加到当前实例，以便在其他地方调用
-            this.c = simplemde;
+            this.simplemde = simplemde;
             //初始化标题和内容
             this.fillContent()
         },

@@ -15,21 +15,38 @@ const router = new Router({
     routes
 })
 
-const that=this;
+
 router.beforeEach((to, from, next) => {
     const app = router.app;
     const store = app.$options.store;
     const auth = store.state.auth;
+    //从路由中获取文章Id
+    const articleId = to.params.articledId;
     app.$message.hide();
 
     if (
         (auth && to.path.indexOf('/auth/') !== -1) ||
-        (!auth && to.meta.auth)
+        (!auth && to.meta.auth) ||
+        //有文章ID但是不能找到对应的文章，跳转到首页
+        (articleId && !store.getters.getArticleById(articleId))
     ) {
         next('/')
     } else {
         next()
     }
 });
+//注册全局后置钩子，在导航确认后调用
+router.afterEach((to, from) => {
+    const app = router.app;
+    const store = app.$options.store;
+    const showMsg = to.params.showMsg;
+    if (showMsg) {
+        if (typeof showMsg === 'String') {
+            app.$message.show(showMsg)
+        } else {
+            app.$message.show('操作成功')
+        }
+    }
+})
 
 export default router

@@ -68,8 +68,22 @@ const actions = {
 //         router.push("/")
 //     }
 // }
+const getters = {
 
+    getArticleById: (state) => (id) => {
+        let articles = state.articles;
+        if (Array.isArray(articles)) {
+            //传进来的id如果和文章的articleId相同就返回这些文章
+            articles = articles.filter(article => parseInt(id) === parseInt(article.articleId));
+            // 根据文章长度，返回文章或者 null
+            return articles.length ? articles[0] : null;
+        } else {
+            return null;
+        }
+    }
+};
 const store = new Vuex.Store({
+    getters,
     state,
     mutations,
     actions

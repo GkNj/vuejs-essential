@@ -36,6 +36,6 @@ export const post = ({commit, state}, {article, articleId}) => {
         commit('UPDATE_ARTICLES', articles);
         // 跳转到首页，并附带 articleId 和 showMsg 参数，
         // showMsg 用来指示目标页面显示一个提示，我们稍后添加相关逻辑
-        router.push({name: 'Home', params: {articleId, showMsg: true}})
+        router.push({name: 'Content', params: {articleId, showMsg: true}})
     }
 };

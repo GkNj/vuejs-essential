@@ -51,6 +51,12 @@ export default [
         path: '/articles/create',
         name: 'Create',
         component: () => import('@/views/articles/Create'),
-        meta: { auth: true }
+        meta: {auth: true}
+    },
+    //路径中articleId参数以冒号开头代表它能匹配任何值
+    {
+        path: '/articles/:articleId/content',
+        name: 'Content',
+        component: () => import('@/views/articles/Content.vue')
     },
 ]
