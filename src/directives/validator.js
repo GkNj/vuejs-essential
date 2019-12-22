@@ -34,28 +34,28 @@ function validate(el, modifiers, bindingValue) {
 }
 
 function showError(el, error) {
-    const parentElement = el.parentElement
-    const errorElement = getErrorElement(el)
+    const parentElement = el.parentElement;
+    const errorElement = getErrorElement(el);
 
     if (error === undefined) {
-        errorElement.style.display = 'none'
+        errorElement.style.display = 'none';
         parentElement.classList.remove('has-error')
     } else {
-        errorElement.textContent = error
-        errorElement.style.display = 'block'
+        errorElement.textContent = error;
+        errorElement.style.display = 'block';
         parentElement.classList.add('has-error')
     }
 }
 
 function getErrorElement(el) {
-    const parentElement = el.parentElement
-    let errorElement = parentElement.querySelector('.help-block')
+    const parentElement = el.parentElement;
+    let errorElement = parentElement.querySelector('.help-block');
 
     if (!errorElement) {
-        const tpl = `<span class="help-block"></span>`
-        const fragment = document.createRange().createContextualFragment(tpl)
+        const tpl = `<span class="help-block"></span>`;
+        const fragment = document.createRange().createContextualFragment(tpl);
 
-        parentElement.appendChild(fragment)
+        parentElement.appendChild(fragment);
         errorElement = parentElement.querySelector('.help-block')
     }
 
@@ -64,52 +64,52 @@ function getErrorElement(el) {
 
 export default {
     bind(el, binding, vnode) {
-        const { value, arg, modifiers } = binding
-        const eventType = ['change', 'blur', 'input'].indexOf(arg) !== -1 ? arg : 'change'
+        const { value, arg, modifiers } = binding;
+        const eventType = ['change', 'blur', 'input'].indexOf(arg) !== -1 ? arg : 'change';
         const defaultHandler = () => {
             showError(el)
-        }
+        };
         const handler = () => {
             validate(el, modifiers, value)
-        }
+        };
 
-        el.addEventListener('input', defaultHandler, false)
-        el.addEventListener(eventType, handler, false)
+        el.addEventListener('input', defaultHandler, false);
+        el.addEventListener(eventType, handler, false);
 
         el.destroy = () => {
-            el.removeEventListener('input', defaultHandler, false)
-            el.removeEventListener(eventType, handler, false)
+            el.removeEventListener('input', defaultHandler, false);
+            el.removeEventListener(eventType, handler, false);
             el.destroy = null
         }
     },
     inserted(el, binding, vnode) {
-        const { value, modifiers } = binding
-        const form = el.closest('[data-validator-form]')
-        const submitBtn = form ? form.querySelector('[type=submit]') : null
+        const { value, modifiers } = binding;
+        const form = el.closest('[data-validator-form]');
+        const submitBtn = form ? form.querySelector('[type=submit]') : null;
 
         if (submitBtn) {
             const submitHandler = () => {
-                validate(el, modifiers, value)
+                validate(el, modifiers, value);
 
-                const errors = form.querySelectorAll('.has-error')
+                const errors = form.querySelectorAll('.has-error');
 
                 if (!errors.length) {
                     submitBtn.canSubmit = true
                 } else {
                     submitBtn.canSubmit = false
                 }
-            }
+            };
 
-            submitBtn.addEventListener('click', submitHandler, false)
+            submitBtn.addEventListener('click', submitHandler, false);
 
             el.destroySubmitBtn = () => {
-                submitBtn.removeEventListener('click', submitHandler, false)
+                submitBtn.removeEventListener('click', submitHandler, false);
                 el.destroySubmitBtn = null
             }
         }
     },
     unbind(el) {
-        el.destroy()
+        el.destroy();
         if (el.destroySubmitBtn) el.destroySubmitBtn()
     }
 }

@@ -3,7 +3,7 @@
         <div class="blog-pages">
             <div class="col-md-12 panel">
                 <div class="panel-body">
-                    <h2 class="text-center">创作文章</h2>
+                    <h2 class="text-center">{{ articleId ? '编辑文章' : '创作文章' }}</h2>
                     <hr>
                     <div data-validator-form>
                         <div class="form-group">
@@ -32,14 +32,30 @@
     import hljs from 'highlight.js'
     import ls from '@/utils/localStorage'
 
-    window.hljs = hljs;
+    window.hljs = hljs
 
     export default {
         name: 'Create',
         data() {
             return {
                 title: '', // 文章标题
-                content: '' // 文章内容
+                content: '', // 文章内容
+                articleId: undefined // 文章 ID
+            }
+        },
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                vm.setArticleId(vm.$route.params.articleId)
+            })
+        },
+        beforeRouteLeave(to, from, next) {
+            this.clearData()
+            next()
+        },
+        watch: {
+            '$route'(to) {
+                this.clearData()
+                this.setArticleId(to.params.articleId)
             }
         },
         mounted() {
@@ -56,43 +72,47 @@
                     codeSyntaxHighlighting: true
                 }
             })
-            // 监听编辑器的 change 事件
+
             simplemde.codemirror.on('change', () => {
-            //将改变后的值赋给文章内容
                 this.content = simplemde.value()
-            });
-            //将simplemde添加到当前实例，以便在其他地方调用
-            this.simplemde = simplemde;
-            //初始化标题和内容
-            this.fillContent()
+            })
+
+            this.simplemde = simplemde
         },
         methods: {
-            //编辑器会自动保存文章内容，文章标题需要自己保存
             saveTitle() {
                 ls.setItem('smde_title', this.title)
             },
-            fillContent() {
+            fillContent(articleId) {
                 const simplemde = this.simplemde
-                const title = ls.getItem('smde_title')
-                //如果有标题数据，则把他当成标题
-                if (title !== null) {
-                    this.title = title
+                const smde_title = ls.getItem('smde_title')
+
+                if (articleId !== undefined) {
+                    const article = this.$store.getters.getArticleById(articleId)
+
+                    if (article) {
+                        const { title, content } = article
+
+                        this.title = smde_title || title
+                        this.content = simplemde.value() || content
+                        simplemde.value(this.content)
+                    }
+                } else {
+                    this.title = smde_title
+                    this.content = simplemde.value()
                 }
-                //使用编辑器的内容当成文章内容
-                this.content = simplemde.value()
             },
-            //发布方法
             post() {
                 const title = this.title
                 const content = this.content
-                //标题和内容都不为空
+
                 if (title !== '' && content.trim() !== '') {
                     const article = {
                         title,
                         content
                     }
-                    this.$store.dispatch('post', {article})
-                    //清除数据
+
+                    this.$store.dispatch('post', { article, articleId: this.articleId })
                     this.clearData()
                 }
             },
@@ -101,6 +121,17 @@
                 ls.removeItem('smde_title')
                 this.simplemde.value('')
                 this.simplemde.clearAutosavedValue()
+            },
+            setArticleId(articleId) {
+                const localArticleId = ls.getItem('articleId')
+
+                if (articleId !== undefined && !(articleId === localArticleId)) {
+                    this.clearData()
+                }
+
+                this.articleId = articleId
+                this.fillContent(articleId)
+                ls.setItem('articleId', articleId)
             }
         }
     }

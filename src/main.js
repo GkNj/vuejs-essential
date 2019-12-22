@@ -5,6 +5,7 @@ import './directives'
 import './components'
 import store from './store'
 import message from "./plugins/message";
+import './filters'
 //引入插件，弹窗
 import VueSweetalert2 from './plugins/vue-sweetalert2'
 
