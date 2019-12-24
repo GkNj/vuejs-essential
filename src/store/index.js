@@ -4,7 +4,7 @@ import ls from '../utils/localStorage'
 import router from '../router'
 import * as moreActions from './action'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 //共享状态 在这里不能直接更改状态  但是可以通过store.state.user的方式访问状态
 const state = {
@@ -12,7 +12,7 @@ const state = {
     //保存当前用户的登录状态
     auth: ls.getItem('auth'),
     articles: ls.getItem('articles')
-}
+};
 //更改状态的方法，在这里可以更改状态，像store.commit('UPDATE_USER'，"user")这样提交一个事件类型，
 //这里不能包含异步操作
 const mutations = {
@@ -29,7 +29,7 @@ const mutations = {
         state.articles = articles;
         ls.setItem('articles', articles)
     }
-}
+};
 //action的第一个参数是与仓库具有相同属性和方法的context对象，可以通过context.state访问到state的状态，
 // 使用context.commit来提交一个事件类型，可以在第一个参数使用参数解构来简化代码，比如{commit}
 const actions = {
@@ -38,11 +38,11 @@ const actions = {
         if (user) {
             commit('UPDATE_USER', user)
         }
-        commit('UPDATE_AUTH', true)
+        commit('UPDATE_AUTH', true);
         router.push('/')
     },
     logout({commit}, user) {
-        commit('UPDATE_AUTH', false)
+        commit('UPDATE_AUTH', false);
         router.push({name: 'Home', params: {logout: true}})
     },
     //更新个人信息
@@ -87,6 +87,6 @@ const store = new Vuex.Store({
     state,
     mutations,
     actions
-})
+});
 
 export default store

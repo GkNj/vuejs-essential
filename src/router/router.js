@@ -7,6 +7,7 @@ export default [
     {
         path: '/',
         name: 'Home',
+        alias:'/topics',
         component: () => import('@/views/Home')
     },
     {
@@ -20,7 +21,6 @@ export default [
     },
     {
         path: '/user/1/edit',
-        name: 'Edit',
         component: () => import('@/views/users/Edit'),
         children:
             [
@@ -55,9 +55,9 @@ export default [
     },
     //edit
     {
-        path: '/articles/"articleId/edit',
+        path: '/articles/:articleId/edit',
         name: 'Edit',
-        component: () => import('@/views/articles/Content')
+        component: () => import('@/views/articles/Create')
     },
     {
         path: '/:user',
