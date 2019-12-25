@@ -229,7 +229,7 @@
                         // 取消编辑评论
                         this.cancelEditComment()
                     }
-                })
+                });
 
                 // 将编辑器添加到当前实例
                 this.simplemde = simplemde

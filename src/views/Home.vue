@@ -28,8 +28,8 @@
                                     <abbr class="timeago">{{ article.date | moment('from') }}</abbr>
                                 </div>
                             </router-link>
-                            <router-link v-if="user" :to="`/${user.name}`" tag="div" class="avatar pull-left">
-                                <img :src="user.avatar" class="media-object img-thumbnail avatar avatar-middle">
+                            <router-link :to="`/${article.uname}`" tag="div" class="avatar pull-left">
+                                <img :src="article.uavatar" class="media-object img-thumbnail avatar avatar-middle">
                             </router-link>
                             <router-link :to="`/articles/${article.articleId}/content`" tag="div" class="infos">
                                 <div class="media-heading">
@@ -88,8 +88,10 @@
             ...mapState([
                 'auth',
                 'user',
-                'articles'
-            ])
+            ]),
+            articles(){
+                return this.$store.getters.computedArticles
+            }
         },
         watch: {
             auth(value) {

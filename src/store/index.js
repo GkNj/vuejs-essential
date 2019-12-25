@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import ls from '../utils/localStorage'
 import router from '../router'
 import * as moreActions from './action'
-
+import * as moreGetters from './getters'
 Vue.use(Vuex);
 
 //共享状态 在这里不能直接更改状态  但是可以通过store.state.user的方式访问状态
@@ -69,9 +69,9 @@ const actions = {
 //     }
 // }
 const getters = {
-
-    getArticleById: (state) => (id) => {
-        let articles = state.articles;
+    getArticleById: (state,getters) => (id) => {
+        // 使用派生状态 computedArticles 作为所有文章
+        let articles = getters.computedArticles;
         if (Array.isArray(articles)) {
             //传进来的id如果和文章的articleId相同就返回这些文章
             articles = articles.filter(article => parseInt(id) === parseInt(article.articleId));
@@ -80,7 +80,9 @@ const getters = {
         } else {
             return null;
         }
-    }
+    },
+    // 混入 moreGetters, 你可以理解为 getters = Object.assign(getters, moreGetters)
+    ...moreGetters
 };
 const store = new Vuex.Store({
     getters,
