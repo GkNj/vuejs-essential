@@ -6,11 +6,11 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <ul class="list-inline topic-filter">
-                        <li><a href="/topics?filter=default" class="active">活跃</a></li>
-                        <li><a href="/topics?filter=excellent">精华</a></li>
-                        <li><a href="/topics?filter=vote">投票</a></li>
-                        <li><a href="/topics?filter=recent">最近</a></li>
-                        <li><a href="/topics?filter=noreply">零回复</a></li>
+                        <li v-for="item in filters">
+                            <router-link v-title="item.title" :class="{ active: filter === item.filter }"
+                                         :to="`/topics?filter=${item.filter}`">{{ item.name }}
+                            </router-link>
+                        </li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
@@ -39,37 +39,51 @@
                         </li>
                     </ul>
                 </div>
+                <!-- 分页组件 -->
+                <div class="panel-footer text-right remove-padding-horizontal pager-footer">
+                    <Pagination :currentPage="currentPage" :total="total" :pageSize="pageSize"
+                                :onPageChange="changePage"/>
+                </div>
 
             </div>
         </div>
+        <!--侧栏-->
+        <TheSidebar/>
     </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
+    import TheSidebar from "@/components/layouts/TheSidebar";
 
     export default {
         name: 'Home',
+        components: {
+            TheSidebar
+        },
         data() {
             return {
-                msg: '', // 消息
-                msgType: '', // 消息类型
-                msgShow: false // 是否显示消息，默认不显示
+                msg: '',
+                msgType: '',
+                msgShow: false,
+                articles: [],
+                filter: 'default',
+                filters: [
+                    {filter: 'default', name: '活跃', title: '最后回复排序'},
+                    {filter: 'excellent', name: '精华', title: '只看加精的话题'},
+                    {filter: 'vote', name: '投票', title: '点赞数排序'},
+                    {filter: 'recent', name: '最近', title: '发布时间排序'},
+                    {filter: 'noreply', name: '零回复', title: '无人问津的话题'}
+                ],
+                total: 0, // 文章总数
+                pageSize: 20, // 每页条数
             }
         },
-        /**
-         * 组件内的路由导航守卫
-         * @param to 即将要进入的路由目标
-         * @param from 即将要离开的目标路由
-         * @param next 一个用来解决当前钩子的方法，需要调用该方法确认或者中段路由。
-         */
         beforeRouteEnter(to, from, next) {
-            //路由的名称
             const fromName = from.name;
             const logout = to.params.logout;
-            //确认导航
+
             next(vm => {
-                //通过vm参数访问到组件实例，已登录时，评估路由名称
                 if (vm.$store.state.auth) {
                     switch (fromName) {
                         case 'Register':
@@ -77,20 +91,23 @@
                             break;
                         case 'Login':
                             vm.showMsg('登录成功');
-                            break;
+                            break
                     }
                 } else if (logout) {
-                    vm.showMsg('注册成功')
+                    vm.showMsg('操作成功')
                 }
+
+                vm.setDataByFilter(to.query.filter)
             })
         },
         computed: {
             ...mapState([
                 'auth',
-                'user',
+                'user'
             ]),
-            articles(){
-                return this.$store.getters.computedArticles
+            // 当前页，从查询参数 page 返回
+            currentPage() {
+                return parseInt(this.$route.query.page) || 1
             }
         },
         watch: {
@@ -98,6 +115,9 @@
                 if (!value) {
                     this.showMsg('操作成功')
                 }
+            },
+            '$route'(to) {
+                this.setDataByFilter(to.query.filter)
             }
         },
         methods: {
@@ -105,6 +125,26 @@
                 this.msg = msg;
                 this.msgType = type;
                 this.msgShow = true
+            },
+            setDataByFilter(filter = 'default') {
+                // 每页条数
+                const pageSize = this.pageSize;
+                // 当前页
+                const currentPage = this.currentPage;
+                // 过滤后的所有文章
+                const allArticles = this.$store.getters.getArticlesByFilter(filter);
+
+                this.filter = filter;
+                // 文章总数
+                this.total = allArticles.length;
+                // 当前页的文章
+                this.articles = allArticles.slice(pageSize * (currentPage - 1), pageSize * currentPage)
+            },
+            // 回调，组件的当前页改变时调用
+            changePage(page) {
+                // 在查询参数中混入 page，并跳转到该地址
+                // 混入部分等价于 Object.assign({}, this.$route.query, { page: page })
+                this.$router.push({query: {...this.$route.query, page}})
             }
         }
     }
