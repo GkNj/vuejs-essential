@@ -23,6 +23,7 @@
                 </ul>
                 <!--入口组件-->
                 <div class="navbar-right">
+                    <SearchInput/>
                     <TheEntry/>
                 </div>
             </div>
@@ -32,10 +33,13 @@
 
 <script>
     import TheEntry from '@/components/layouts/TheEntry'
+    import SearchInput from "@/components/SearchInput";
+
     export default {
         name: 'TheHeader',
-        components:{
-            TheEntry
+        components: {
+            TheEntry,
+            SearchInput
         },
         data() {
             return {
@@ -63,6 +67,11 @@
 </script>
 
 <style scoped>
-    .title { display: none;}
-    .navbar-default .navbar-nav > .active > a { background: rgba(0,0,0,.03);}
+    .title {
+        display: none;
+    }
+
+    .navbar-default .navbar-nav > .active > a {
+        background: rgba(0, 0, 0, .03);
+    }
 </style>

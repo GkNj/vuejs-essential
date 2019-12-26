@@ -59,6 +59,12 @@ export default [
         name: 'Edit',
         component: () => import('@/views/articles/Create')
     },
+    // Search
+    {
+        path: '/search',
+        name: 'Search',
+        component: () => import('@/views/Search')
+    },
     {
         path: '/:user',
         component: () => import('@/views/articles/Column'),

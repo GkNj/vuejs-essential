@@ -4,7 +4,7 @@ export const computedArticles = (state) => {
     let newArticles = [];
 
     // 添加用户信息，参数 isCurrentUser 代表是否是当前用户
-    const addUserInfo = function(isCurrentUser) {
+    const addUserInfo = function (isCurrentUser) {
         const userName = state.user && state.user.name;
         const userAvatar = state.user && state.user.avatar;
         const avatarUrl = 'https://api.adorable.io/avatars/200/';
@@ -92,9 +92,9 @@ export const getArticlesByFilter = (state, getters) => (filter) => {
 
     if (Array.isArray(articles)) {
         // 深拷贝 articles 以不影响其原值
-        filteredArticles = articles.map(article => ({ ...article }));
+        filteredArticles = articles.map(article => ({...article}));
 
-        switch(filter) {
+        switch (filter) {
             case 'excellent':
                 // 将当前用户的文章设置为精华文章
                 filteredArticles = getters.getArticlesByUid(1);
@@ -147,4 +147,31 @@ export const getArticlesByFilter = (state, getters) => (filter) => {
     }
 
     return filteredArticles
+};
+//根据关键字keyword返回搜索结果
+export const getArticlesByKeyword = (state, getters) => (keyword) => {
+    let articles = getters.computedArticles;
+    // 搜索结果
+    let results = [];
+
+    if (Array.isArray(articles)) {
+        articles.forEach((article) => {
+            let {articleId, title, content} = article;
+            // 该正则表示文章标题或内容中的关键字
+            const regex = new RegExp(`(${keyword})`, 'gi');
+
+            if (title.indexOf(keyword) !== -1 || content.indexOf(keyword) !== -1) {
+                // url 是文章中没有的数据，我们结合 articleId 拼出完整的路径
+                const url = `${state.origin}/articles/${articleId}/content`;
+                // 给文章标题中的关键字加上高亮，$1 匹配第一个括号的内容
+                title = title.replace(regex, '<span class="highlight">$1</span>');
+                // 给文章内容中的关键字加上高亮，只取内容前 100 个字
+                content = content.substr(0, 100).replace(regex, '<span class="highlight">$1</span>');
+                // 等价于 results.push(Object.assign({}, article, { url: url, title: title, content: content }))
+                results.push({...article, ...{url, title, content}})
+            }
+        })
+    }
+
+    return results
 };

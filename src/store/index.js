@@ -4,6 +4,7 @@ import ls from '../utils/localStorage'
 import router from '../router'
 import * as moreActions from './action'
 import * as moreGetters from './getters'
+
 Vue.use(Vuex);
 
 //共享状态 在这里不能直接更改状态  但是可以通过store.state.user的方式访问状态
@@ -11,7 +12,9 @@ const state = {
     user: ls.getItem('user'),
     //保存当前用户的登录状态
     auth: ls.getItem('auth'),
-    articles: ls.getItem('articles')
+    articles: ls.getItem('articles'),
+    search: '',
+    origin: location.origin
 };
 //更改状态的方法，在这里可以更改状态，像store.commit('UPDATE_USER'，"user")这样提交一个事件类型，
 //这里不能包含异步操作
@@ -28,6 +31,9 @@ const mutations = {
     UPDATE_ARTICLES(state, articles) {
         state.articles = articles;
         ls.setItem('articles', articles)
+    },
+    UPDATE_SEARCH_VALUE(state, searchValue) {
+        state.serchValue = searchValue;
     }
 };
 //action的第一个参数是与仓库具有相同属性和方法的context对象，可以通过context.state访问到state的状态，
@@ -69,7 +75,7 @@ const actions = {
 //     }
 // }
 const getters = {
-    getArticleById: (state,getters) => (id) => {
+    getArticleById: (state, getters) => (id) => {
         // 使用派生状态 computedArticles 作为所有文章
         let articles = getters.computedArticles;
         if (Array.isArray(articles)) {
