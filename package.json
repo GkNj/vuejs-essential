@@ -13,7 +13,7 @@
     "bootstrap-sass": "^3.4.1",
     "core-js": "^3.4.3",
     "font-awesome": "^4.7.0",
-    "highlight.js": "^9.17.1",
+    "highlight.js": "^10.1.2",
     "mockjs": "^1.1.0",
     "moment": "^2.24.0",
     "node-emoji": "^1.10.0",
